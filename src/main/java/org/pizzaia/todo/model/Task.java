@@ -1,5 +1,6 @@
 package org.pizzaia.todo.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class Task {
     private String description;
 
     @Column(name = "due_date", nullable = false)
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dueDate;
 
     @Column(name = "status", nullable = false)

@@ -20,12 +20,12 @@ public class DatabaseConfig {
     @Bean
     public DataSource dataSource() {
         Map<String, String> secretData = SecretReader.read();
-        System.out.println(secretData);
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName(secretData.get("driverClassName"));
         ds.setUrl(secretData.get("url"));
         ds.setUsername(secretData.get("username"));
         ds.setPassword(secretData.get("password"));
+        ds.setPassword("123");
         return ds;
     }
 
