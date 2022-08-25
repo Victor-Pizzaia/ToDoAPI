@@ -1,20 +1,21 @@
 package org.pizzaia.todo.service;
 
+import lombok.RequiredArgsConstructor;
 import org.pizzaia.todo.exception.ValidationException;
 import org.pizzaia.todo.model.Status;
 import org.pizzaia.todo.model.Task;
 import org.pizzaia.todo.repository.TaskRepository;
 import org.pizzaia.todo.util.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TaskService {
-    @Autowired
-    TaskRepository taskRepository;
+
+    private final TaskRepository taskRepository;
 
     public List<Task> findAll() {
         return taskRepository.findAll();

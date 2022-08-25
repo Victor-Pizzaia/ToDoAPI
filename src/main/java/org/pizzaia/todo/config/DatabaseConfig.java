@@ -25,7 +25,6 @@ public class DatabaseConfig {
         ds.setUrl(secretData.get("url"));
         ds.setUsername(secretData.get("username"));
         ds.setPassword(secretData.get("password"));
-        ds.setPassword("123");
         return ds;
     }
 

@@ -26,5 +26,5 @@ public class Task {
     private LocalDate dueDate;
 
     @Column(name = "status", nullable = false)
-    private Status status;
+    private Status status = Status.TODO;
 }
