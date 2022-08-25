@@ -2,6 +2,7 @@ package org.pizzaia.todo.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 @Entity
 @Data
 @Table(name = "Tasks")
+@NoArgsConstructor
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +28,13 @@ public class Task {
     private LocalDate dueDate;
 
     @Column(name = "status", nullable = false)
-    private Status status = Status.TODO;
+    private Status status;
+
+    public Task(TaskDTO task) {
+        this.id = task.getId();
+        this.name = task.getName();
+        this.description = task.getDescription();
+        this.dueDate = task.getDueDate();
+        this.status = task.getStatus() != null ? task.getStatus() : Status.TODO;
+    }
 }

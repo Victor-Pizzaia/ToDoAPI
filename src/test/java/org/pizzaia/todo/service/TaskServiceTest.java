@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.pizzaia.todo.exception.ValidationException;
 import org.pizzaia.todo.model.Status;
 import org.pizzaia.todo.model.Task;
 import org.pizzaia.todo.repository.TaskRepository;
@@ -15,6 +14,7 @@ import org.pizzaia.todo.repository.TaskRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,7 +43,7 @@ public class TaskServiceTest {
         task.setDueDate(LocalDate.now());
         try {
             taskService.saveOrUpdate(task);
-        } catch (ValidationException e) {
+        } catch (IllegalArgumentException e) {
             assertThat(e.getMessage()).isEqualTo("Preencha o nome da tarefa");
         }
     }
@@ -54,7 +54,7 @@ public class TaskServiceTest {
         task.setName("Testes");
         try {
             taskService.saveOrUpdate(task);
-        } catch (ValidationException e) {
+        } catch (IllegalArgumentException e) {
             assertThat(e.getMessage()).isEqualTo("Preencha a data da tarefa");
         }
     }
@@ -66,13 +66,13 @@ public class TaskServiceTest {
         task.setDueDate(LocalDate.of(2015, 1, 1));
         try {
             taskService.saveOrUpdate(task);
-        } catch (ValidationException e) {
+        } catch (IllegalArgumentException e) {
             assertThat(e.getMessage()).isEqualTo("A data da tarefa não deve estar no passado");
         }
     }
 
     @Test
-    void shouldSaveTaskWithSuccess() throws ValidationException {
+    void shouldSaveTaskWithSuccess() throws IllegalArgumentException {
         Task task = new Task();
         task.setName("Testes");
         task.setDueDate(LocalDate.now());
@@ -91,7 +91,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    void shouldReturnTaskById() throws Exception {
+    void shouldReturnTaskById() throws IllegalArgumentException {
         Mockito.when(taskRepository.findById(1L)).thenReturn(Optional.of(utilTask));
         Task expectedTask = taskService.findById(1);
         assertThat(expectedTask).isEqualTo(utilTask);
@@ -118,7 +118,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    void shouldReturnTaskByName() throws Exception {
+    void shouldReturnTaskByName() throws IllegalArgumentException {
         Mockito.when(taskRepository.findByName("Testes")).thenReturn(Optional.of(utilTask));
         Task expectedTask = taskService.findByName("Testes");
         assertThat(expectedTask).isEqualTo(utilTask);
@@ -135,7 +135,7 @@ public class TaskServiceTest {
     }
 
     /*@Test
-    void shoudlDeleteATaskById() throws Exception {
+    void shoudlDeleteATaskById() throws IllegalArgumentException {
         Mockito.when(taskRepository.findById(utilTask.getId())).thenReturn(Optional.of(utilTask));
         taskService.delete(utilTask.getId());
         Mockito.verify(taskRepository).deleteById(utilTask.getId());
@@ -151,7 +151,7 @@ public class TaskServiceTest {
     }
 
     /*@Test
-    void shoudlDeleteATaskByName() throws Exception {
+    void shoudlDeleteATaskByName() throws IllegalArgumentException {
         Mockito.when(taskRepository.findByName(utilTask.getName())).thenReturn(Optional.of(utilTask));
         taskService.deleteByName(utilTask.getName());
         Mockito.verify(taskRepository).deleteByName(utilTask.getName());

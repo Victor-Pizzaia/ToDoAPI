@@ -1,8 +1,8 @@
 package org.pizzaia.todo.controller;
 
-import org.pizzaia.todo.exception.ValidationException;
 import org.pizzaia.todo.model.Status;
 import org.pizzaia.todo.model.Task;
+import org.pizzaia.todo.model.TaskDTO;
 import org.pizzaia.todo.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,11 +49,12 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<? super Task> saveOrUpdateTask(@RequestBody Task task) {
+    public ResponseEntity<? super Task> saveOrUpdateTask(@RequestBody TaskDTO taskDTO) {
+        Task task = new Task(taskDTO);
         try {
             var savedTask = taskService.saveOrUpdate(task);
             return new ResponseEntity<>(savedTask, HttpStatus.CREATED);
-        } catch (ValidationException e) {
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
