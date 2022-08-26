@@ -34,8 +34,8 @@ jobs:
           distribution: 'temurin'
       - name: Test with Gradle
         uses: gradle/gradle-build-action@v2
-        with:
-          arguments: test
+      - run: chmod +x ./gradlew
+      - run: gradle clean assemble
 
   sonarqube:
     runs-on: ubuntu-latest
