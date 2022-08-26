@@ -25,7 +25,7 @@ public class TaskService {
         if(task.isPresent()) {
             return task.get();
         }
-        throw new IllegalArgumentException("Tarefa não encontrada");
+        throw new IllegalStateException("Tarefa não encontrada");
     }
 
     public List<Task> findByStatus(Status status) {
@@ -37,7 +37,7 @@ public class TaskService {
         if(task.isPresent()) {
             return task.get();
         }
-        throw new IllegalArgumentException("Tarefa não encontrada");
+        throw new IllegalStateException("Tarefa não encontrada");
     }
 
     public Task saveOrUpdate(Task task) {
@@ -58,7 +58,7 @@ public class TaskService {
             taskRepository.deleteById(id);
             return;
         }
-        throw new IllegalArgumentException("A tarefa não existe");
+        throw new IllegalStateException("A tarefa não existe");
     }
 
     @Transactional
@@ -67,6 +67,6 @@ public class TaskService {
             taskRepository.deleteByName(name);
             return;
         }
-        throw new IllegalArgumentException("A tarefa não existe");
+        throw new IllegalStateException("A tarefa não existe");
     }
 }
