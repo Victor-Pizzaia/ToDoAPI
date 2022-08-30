@@ -44,6 +44,11 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: build gradle for sonar
+        uses: gradle/gradle-build-action@v2
+      - run: chmod +x ./gradlew
+      - run: gradle assemble
+      - run: ls
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         env:
@@ -53,7 +58,6 @@ jobs:
           args: >
             -Dsonar.projectKey=${{ secrets.PROJECT_NAME }}
             -Dsonar.java.binaries=build
-      - run: ls
       - name: SonarQube Quality Gate check
         id: sonarqube-quality-gate-check
         uses: sonarsource/sonarqube-quality-gate-action@master
