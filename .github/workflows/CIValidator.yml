@@ -52,7 +52,7 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=${{ secrets.PROJECT_NAME }}
-            -Dsonar.java.binaries=target
+            -Dsonar.java.binaries=build
       - name: SonarQube Quality Gate check
         id: sonarqube-quality-gate-check
         uses: sonarsource/sonarqube-quality-gate-action@master
