@@ -65,6 +65,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
-          scanMetadataReportFile: build/reports/jacoco/test/jacocoTestReport.xml
+          scanMetadataReportFile: build/sonar/report-task.txt
       - name: "Show SonarQube Quality Gate Status value"
         run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
