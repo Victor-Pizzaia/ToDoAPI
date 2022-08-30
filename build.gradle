@@ -44,6 +44,12 @@ jacocoTestReport {
 }
 test.finalizedBy jacocoTestReport
 
+sonarqube {
+    properties {
+        property "sonar.exclusions", "src/test/**"
+    }
+}
+
 tasks.named('sonarqube').configure {
     dependsOn test
 }
