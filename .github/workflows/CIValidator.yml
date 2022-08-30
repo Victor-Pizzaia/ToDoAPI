@@ -47,7 +47,7 @@ jobs:
       - name: build gradle for sonar
         uses: gradle/gradle-build-action@v2
       - run: chmod +x ./gradlew
-      - run: gradle assemble
+      - run: gradle build
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         env:
