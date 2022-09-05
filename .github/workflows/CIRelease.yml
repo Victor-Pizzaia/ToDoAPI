@@ -31,4 +31,4 @@ jobs:
       - run: ::set-output name=projectVersion::$( gradle properties -q | grep 'version:' | grep -e '^[^\\[]' | sed -e 's/version://g' )
         id: version
       - name: Build the Docker image
-          run: docker build . --file Dockerfile --tag ToDoAPI:${{ steps.version.outputs.projectVersion }} --build-args PROJECT_VERSION=${{ steps.version.outputs.projectVersion }}
+      - run: docker build . --file Dockerfile --tag ToDoAPI:${{ steps.version.outputs.projectVersion }} --build-args PROJECT_VERSION=${{ steps.version.outputs.projectVersion }}
