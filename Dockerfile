@@ -8,7 +8,11 @@ FROM openjdk:11-jre-slim
 EXPOSE 8080
 
 RUN mkdir /app
+WORKDIR /app
 
-COPY --from=build /home/gradle/src/build/libs/ToDoAPI-1.0.0.jar /app/ToDo-application.jar
+ARG PROJECT_VERSION
+ENV PROJECT_VERSION $PROJECT_VERSION
+
+COPY --from=build /home/gradle/src/build/libs/ToDoAPI-$PROJECT_VERSION.jar /app/ToDo-application.jar
 
 ENTRYPOINT ["java", "-jar", "/app/ToDo-application.jar"]
