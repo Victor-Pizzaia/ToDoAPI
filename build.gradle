@@ -35,6 +35,7 @@ dependencies {
 
 release {
     snapshotSuffix = ''
+    failOnCommitNeeded = false
 }
 
 jacocoTestReport {
