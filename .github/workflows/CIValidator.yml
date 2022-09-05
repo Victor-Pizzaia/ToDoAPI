@@ -1,9 +1,6 @@
 name: Validation pull request CI
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -35,7 +32,7 @@ jobs:
       - name: Test with Gradle
         uses: gradle/gradle-build-action@v2
       - run: chmod +x ./gradlew
-      - run: gradle clean assemble
+      - run: gradle test
 
   sonarqube:
     runs-on: ubuntu-latest
