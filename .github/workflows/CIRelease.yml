@@ -31,6 +31,6 @@ jobs:
         id: get-version
         uses: gradle/gradle-build-action@v2
       - run: chmod +x ./gradlew
-      - run: echo ::set-output name=projectVersion::gradle properties -q | grep 'version:' | grep -e '^[^\\[]' | sed -e 's/version://g'
-      - run: docker build . --file Dockerfile --tag ToDoAPI:${{ steps.get-version.outputs.projectVersion }} --build-args PROJECT_VERSION=${{ steps.get-version.outputs.projectVersion }}
+      - run: echo "projectVersion=$( gradle properties -q | grep 'version:' | grep -e '^[^\\[]' | sed -e 's/version://g' )" >> $GITHUB_ENV
+      - run: docker build . --file Dockerfile --tag ToDoAPI:${{ env.projectVersion }} --build-args PROJECT_VERSION=${{ env.projectVersion }}
 
