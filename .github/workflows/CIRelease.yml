@@ -33,3 +33,4 @@ jobs:
       - run: chmod +x ./gradlew
       - run: ::set-output name=projectVersion::$( gradle properties -q | grep 'version:' | grep -e '^[^\\[]' | sed -e 's/version://g' )
       - run: docker build . --file Dockerfile --tag ToDoAPI:${{ steps.get-version.outputs.projectVersion }} --build-args PROJECT_VERSION=${{ steps.get-version.outputs.projectVersion }}
+
