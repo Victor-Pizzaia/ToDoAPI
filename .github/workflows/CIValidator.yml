@@ -56,7 +56,8 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=${{ secrets.PROJECT_NAME }}
-            -Dsonar.coverage.exclusions="**/src/test/**,**/model/**,**Application.java,**/src/config/**"
+            -Dsonar.coverage.exclusions=**/src/test/**,**/model/**,**Application.java,**/src/config/**
+            -Dsonar.java.binaries=build
       - name: SonarQube Quality Gate check
         id: sonarqube-quality-gate-check
         uses: sonarsource/sonarqube-quality-gate-action@master
