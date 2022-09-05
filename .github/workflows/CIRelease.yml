@@ -25,7 +25,8 @@ jobs:
     needs: release
     steps:
       - uses: actions/checkout@v3
-      - uses: fregante/setup-git-user@v1
+      - name: Set git profile
+        uses: fregante/setup-git-user@v1
       - name: Get project version and build Docker
         id: get-version
         uses: actions/gradle/gradle-build-action@v2
