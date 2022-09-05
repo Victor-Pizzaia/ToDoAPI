@@ -24,11 +24,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: release
     steps:
-      - uses: actions/checkout@v3
       - name: Get project version
         uses: actions/gradle/gradle-build-action@v2
       - run: chmod +x ./gradlew
       - run: ::set-output name=projectVersion::$( gradle properties -q | grep 'version:' | grep -e '^[^\\[]' | sed -e 's/version://g' )
         id: version
+      - uses: actions/checkout@v3
       - name: Build the Docker image
       - run: docker build . --file Dockerfile --tag ToDoAPI:${{ steps.version.outputs.projectVersion }} --build-args PROJECT_VERSION=${{ steps.version.outputs.projectVersion }}
