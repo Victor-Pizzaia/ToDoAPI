@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/todo")
@@ -19,33 +22,24 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping
-    public ResponseEntity<List<Task>> getAllTasks() {
-        return new ResponseEntity<>(taskService.findAll(), HttpStatus.OK);
-    }
-
-    @GetMapping("/status/{status}")
-    public ResponseEntity<List<Task>> getTasksByStatus(@PathVariable Status status) {
-        return new ResponseEntity<>(taskService.findByStatus(status), HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<? super Task> getTaskById(@PathVariable long id) {
+    public ResponseEntity<List<Task>> getTasks(@RequestParam Map<String, String> params) {
+        List<Task> tasks = new ArrayList<>();
         try {
-            var task = taskService.findById(id);
-            return new ResponseEntity<>(task, HttpStatus.FOUND);
+            if(params.get("id") != null) {
+                tasks.add(taskService.findById(Integer.parseInt(params.get("id"))));
+            } else if(params.get("name") != null) {
+                tasks.add(taskService.findByName(params.get("name")));
+            } else if(params.get("status") != null) {
+                Status status = Status.valueOf(params.get("status").toUpperCase());
+                tasks.addAll(taskService.findByStatus(status));
+            } else {
+                tasks.addAll(taskService.findAll());
+            }
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
-    }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<? super Task> getTaskByName(@PathVariable String name) {
-        try {
-            var task = taskService.findByName(name);
-            return new ResponseEntity<>(task, HttpStatus.FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
     @PostMapping
@@ -59,23 +53,20 @@ public class TaskController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTask(@PathVariable long id) {
+    @DeleteMapping
+    public ResponseEntity<String> deleteTasks(@RequestParam Map<String, String> params) {
         try {
-            taskService.delete(id);
-            return new ResponseEntity<>("Tarefa excluida", HttpStatus.OK);
+            if(params.get("id") != null) {
+                taskService.delete(Integer.parseInt(params.get("id")));
+            } else if(params.get("name") != null) {
+                taskService.deleteByName(params.get("name"));
+            } else {
+                throw new IllegalArgumentException("Argumentos inválidos");
+            }
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
-    }
 
-    @DeleteMapping("/name/{name}")
-    public ResponseEntity<String> deleteTaskByName(@PathVariable String name) {
-        try {
-            taskService.deleteByName(name);
-            return new ResponseEntity<>("Tarefa excluida", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>("Tarefa excluida", HttpStatus.OK);
     }
 }
