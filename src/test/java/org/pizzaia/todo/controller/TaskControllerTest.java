@@ -42,7 +42,7 @@ public class TaskControllerTest {
 
     @InjectMocks
     private TaskController taskController;
-    
+
     private JacksonTester<List<Task>> listJson;
     private JacksonTester<TaskDTO> jsonDTO;
 
@@ -259,17 +259,17 @@ public class TaskControllerTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 
-    /*@Test
+    @Test
     public void shouldNotDeleteNonExistentTask() throws Exception {
-        Mockito.when(taskRepository.existsById(77L)).thenThrow(new IllegalStateException());
+        Mockito.doThrow(IllegalArgumentException.class).when(taskService).delete(77L);
         MockHttpServletResponse response = mockMvc.perform(
-                        MockMvcRequestBuilders.delete("/todo/77").accept(MediaType.APPLICATION_JSON)
+                        MockMvcRequestBuilders.delete("/todo?id=77").accept(MediaType.APPLICATION_JSON)
                 )
                 .andReturn()
                 .getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-    }*/
+    }
 
     @Test
     public void shouldDeleteTaskByName() throws Exception {
@@ -282,15 +282,15 @@ public class TaskControllerTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 
-    /*@Test
+    @Test
     public void shouldNotDeleteNonExistentTaskByName() throws Exception {
-        Mockito.when(taskRepository.existsByName("Error")).thenReturn(false);
+        Mockito.doThrow(IllegalArgumentException.class).when(taskService).deleteByName("Error");
         MockHttpServletResponse response = mockMvc.perform(
-                        MockMvcRequestBuilders.delete("/todo/name/Error").accept(MediaType.APPLICATION_JSON)
+                        MockMvcRequestBuilders.delete("/todo?name=Error").accept(MediaType.APPLICATION_JSON)
                 )
                 .andReturn()
                 .getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-    }*/
+    }
 }

@@ -43,13 +43,13 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<? super Task> saveOrUpdateTask(@RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<Task> saveOrUpdateTask(@RequestBody TaskDTO taskDTO) {
         Task task = new Task(taskDTO);
         try {
             var savedTask = taskService.saveOrUpdate(task);
             return new ResponseEntity<>(savedTask, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 
