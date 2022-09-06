@@ -42,8 +42,7 @@ public class TaskControllerTest {
 
     @InjectMocks
     private TaskController taskController;
-
-    private JacksonTester<Task> json;
+    
     private JacksonTester<List<Task>> listJson;
     private JacksonTester<TaskDTO> jsonDTO;
 
@@ -88,7 +87,7 @@ public class TaskControllerTest {
         Mockito.when(taskService.findByStatus(Status.TODO)).thenReturn(utilListTasks);
 
         MockHttpServletResponse response = mockMvc.perform(
-                        MockMvcRequestBuilders.get("/todo/status/TODO").accept(MediaType.APPLICATION_JSON)
+                        MockMvcRequestBuilders.get("/todo?status=todo").accept(MediaType.APPLICATION_JSON)
                 )
                 .andReturn()
                 .getResponse();
@@ -107,16 +106,17 @@ public class TaskControllerTest {
         Mockito.when(taskService.findById(1)).thenReturn(utilTask);
 
         MockHttpServletResponse response = mockMvc.perform(
-                        MockMvcRequestBuilders.get("/todo/1").accept(MediaType.APPLICATION_JSON)
+                        MockMvcRequestBuilders.get("/todo?id=1").accept(MediaType.APPLICATION_JSON)
                 )
                 .andReturn()
                 .getResponse();
 
-        Task expected = new Task(utilDtoTask);
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND.value());
+        List<Task> expected = new ArrayList<>();
+        expected.add(new Task(utilDtoTask));
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getContentAsString())
                 .isEqualTo(
-                        json.write(expected).getJson()
+                        listJson.write(expected).getJson()
                 );
     }
 
@@ -125,7 +125,7 @@ public class TaskControllerTest {
         Mockito.when(taskService.findById(77)).thenThrow(new IllegalArgumentException());
 
         MockHttpServletResponse response = mockMvc.perform(
-                        MockMvcRequestBuilders.get("/todo/77").accept(MediaType.APPLICATION_JSON)
+                        MockMvcRequestBuilders.get("/todo?id=77").accept(MediaType.APPLICATION_JSON)
                 )
                 .andReturn()
                 .getResponse();
@@ -139,16 +139,17 @@ public class TaskControllerTest {
         Mockito.when(taskService.findByName("Testes")).thenReturn(utilTask);
 
         MockHttpServletResponse response = mockMvc.perform(
-                        MockMvcRequestBuilders.get("/todo/name/Testes").accept(MediaType.APPLICATION_JSON)
+                        MockMvcRequestBuilders.get("/todo?name=Testes").accept(MediaType.APPLICATION_JSON)
                 )
                 .andReturn()
                 .getResponse();
 
-        Task expected = new Task(utilDtoTask);
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.FOUND.value());
+        List<Task> expected = new ArrayList<>();
+        expected.add(new Task(utilDtoTask));
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getContentAsString())
                 .isEqualTo(
-                        json.write(expected).getJson()
+                        listJson.write(expected).getJson()
                 );
     }
 
@@ -157,7 +158,7 @@ public class TaskControllerTest {
         Mockito.when(taskService.findByName("Error")).thenThrow(new IllegalArgumentException());
 
         MockHttpServletResponse response = mockMvc.perform(
-                        MockMvcRequestBuilders.get("/todo/name/Error").accept(MediaType.APPLICATION_JSON)
+                        MockMvcRequestBuilders.get("/todo?name=Error").accept(MediaType.APPLICATION_JSON)
                 )
                 .andReturn()
                 .getResponse();
@@ -250,7 +251,7 @@ public class TaskControllerTest {
     @Test
     public void shouldDeleteTask() throws Exception {
         MockHttpServletResponse response = mockMvc.perform(
-                        MockMvcRequestBuilders.delete("/todo/1").accept(MediaType.APPLICATION_JSON)
+                        MockMvcRequestBuilders.delete("/todo?id=1").accept(MediaType.APPLICATION_JSON)
                 )
                 .andReturn()
                 .getResponse();
@@ -273,7 +274,7 @@ public class TaskControllerTest {
     @Test
     public void shouldDeleteTaskByName() throws Exception {
         MockHttpServletResponse response = mockMvc.perform(
-                        MockMvcRequestBuilders.delete("/todo/name/Testes").accept(MediaType.APPLICATION_JSON)
+                        MockMvcRequestBuilders.delete("/todo?name=Testes").accept(MediaType.APPLICATION_JSON)
                 )
                 .andReturn()
                 .getResponse();
