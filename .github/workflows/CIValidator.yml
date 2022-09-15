@@ -38,9 +38,9 @@ jobs:
       - run: chmod +x ./gradlew
       - run: gradle test
       - uses: actions/upload-artifact@v3
-          with:
-            name: test
-            path: build/
+        with:
+          name: test
+          path: build/
 
   sonarqube:
     runs-on: ubuntu-latest
